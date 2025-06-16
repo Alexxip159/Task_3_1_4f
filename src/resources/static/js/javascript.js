@@ -37,44 +37,48 @@ async function receiveData(id, form) {
 //Функция инициализации таблицы пользователей
 function init() {
     document.addEventListener('DOMContentLoaded', async function() {
-        await listUsers()
-
-        //Установка обратотчиков на кнопки Edit в таблице
-        let editbutton = document.querySelectorAll('.edit-button')
-        editbutton.forEach(function(item){
-            /* Назначаем каждой кнопке обработчик клика */
-            item.addEventListener('click', function(event) {
-                let button = document.querySelector('#edit-button')
-                button.setAttribute('class', 'btn btn-primary')
-                button.innerHTML = 'Edit user'
-                document.querySelector('#staticBackdropLabel').innerHTML = 'Edit user'
-                document.querySelectorAll('.editable').forEach(function(item) {item.removeAttribute('disabled')})
-                document.querySelector('[name="_method"]').value = 'PATCH'
-                let userid = this.getAttribute('value')
-                let form = document.querySelector('#edit-form')
-                receiveData(userid, form)
-            })
-        })
-
-        //Установка обратотчиков на кнопки Delete в таблице
-        let deletebutton = document.querySelectorAll('.delete-button')
-        deletebutton.forEach(function(item){
-            item.addEventListener('click', function(event) {
-                let button = document.querySelector('#edit-button')
-                button.setAttribute('class', 'btn btn-danger')
-                button.innerHTML = 'Delete user'
-                document.querySelector('#staticBackdropLabel').innerHTML = 'Delete user'
-                document.querySelectorAll('.editable').forEach(function(item) {item.setAttribute('disabled', true)})
-                document.querySelector('[name="_method"]').value = 'DELETE'
-                let userid = this.getAttribute('value')
-                let form = document.querySelector('#edit-form')
-                receiveData(userid, form)
-            })
-        })
+        await listUsersWithListener()
     })
 }
 
 init()
+
+async function listUsersWithListener() {
+    await listUsers()
+
+    //Установка обратотчиков на кнопки Edit в таблице
+    let editbutton = document.querySelectorAll('.edit-button')
+    editbutton.forEach(function(item){
+        /* Назначаем каждой кнопке обработчик клика */
+        item.addEventListener('click', function(event) {
+            let button = document.querySelector('#edit-button')
+            button.setAttribute('class', 'btn btn-primary')
+            button.innerHTML = 'Edit user'
+            document.querySelector('#staticBackdropLabel').innerHTML = 'Edit user'
+            document.querySelectorAll('.editable').forEach(function(item) {item.removeAttribute('disabled')})
+            document.querySelector('[name="_method"]').value = 'PATCH'
+            let userid = this.getAttribute('value')
+            let form = document.querySelector('#edit-form')
+            receiveData(userid, form)
+        })
+    })
+
+    //Установка обработчиков на кнопки Delete в таблице
+    let deletebutton = document.querySelectorAll('.delete-button')
+    deletebutton.forEach(function(item){
+        item.addEventListener('click', function(event) {
+            let button = document.querySelector('#edit-button')
+            button.setAttribute('class', 'btn btn-danger')
+            button.innerHTML = 'Delete user'
+            document.querySelector('#staticBackdropLabel').innerHTML = 'Delete user'
+            document.querySelectorAll('.editable').forEach(function(item) {item.setAttribute('disabled', true)})
+            document.querySelector('[name="_method"]').value = 'DELETE'
+            let userid = this.getAttribute('value')
+            let form = document.querySelector('#edit-form')
+            receiveData(userid, form)
+        })
+    })
+}
 
 //Установка обратотчиков
 document.addEventListener('DOMContentLoaded', async function() {
@@ -84,12 +88,12 @@ document.addEventListener('DOMContentLoaded', async function() {
     userFormEdit.addEventListener('submit', async e => {
         e.preventDefault()
         let id = '/' + document.querySelector('#id').value
-        let method = userFormEdit.getAttribute('method')
+        let method = userFormEdit.querySelector('input').getAttribute('value') /*userFormEdit.getAttribute('method')*/
         const formData = formToJson(userFormEdit)
 
         try {
             const data = await sendRequest(requestUrl + id, method, formData)
-            init()
+            await listUsersWithListener()
             console.log(data)
         } catch (e) {
             console.error(e)
@@ -109,6 +113,7 @@ document.addEventListener('DOMContentLoaded', async function() {
             init()
             document.querySelector('#home-tab').click()
             clearFormCreate()
+            await listUsersWithListener()
             console.log(data)
         } catch (e) {
             console.error(e)

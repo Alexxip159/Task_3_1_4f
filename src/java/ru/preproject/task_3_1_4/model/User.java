@@ -1,10 +1,12 @@
 package ru.preproject.task_3_1_4.model;
 
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+import ru.preproject.task_3_1_4.components.RoleDeserializer;
 
 import java.util.*;
 
@@ -34,6 +36,7 @@ public class User implements UserDetails {
     @JoinTable(name = "users_roles",
             joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"),
             inverseJoinColumns = @JoinColumn(name = "role_id", referencedColumnName = "id"))
+    @JsonDeserialize(using = RoleDeserializer.class)
     private Set<Role> roles;
 
     public User() {

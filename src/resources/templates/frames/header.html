@@ -8,8 +8,8 @@
         <nav th:fragment="header" class="navbar bg-dark" data-bs-theme="dark">
             <div class="container">
                 <div class="navbar-text">
-                    <span th:text="|${#authentication.getPrincipal().getUsername()} with roles: |"></span>
-                    <span th:each="authority : ${#authentication.getAuthorities()}" th:text="|${authority.getAuthority().replaceAll('ROLE_', ' ')}|"></span>
+                    <span th:text="|${authenticateduser.getUsername()} with roles: |"></span>
+                    <span th:each="authority : ${authenticateduser.getAuthorities()}" th:text="|${authority.getAuthority().replaceAll('ROLE_', ' ')}|"></span>
                 </div>
                 <a class="navbar-brand" href="/logout">Logout</a>
             </div>

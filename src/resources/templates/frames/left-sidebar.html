@@ -6,8 +6,8 @@
     </head>
     <body>
         <div th:fragment="left-sidebar" class="nav flex-column nav-pills me-3 col-2 pt-5 bg-white vh-100" id="v-pills-tab" role="tablist" aria-orientation="vertical">
-            <button sec:authorize="hasRole('ROLE_ADMIN')" class="nav-link active" id="v-pills-home-tab" data-bs-toggle="pill" data-bs-target="#v-pills-home" type="button" role="tab" aria-controls="v-pills-home" aria-selected="true">Admin</button>
-            <button aria-selected="false" th:attr="class=!${#authorization.expression('hasRole(''ADMIN'')')} ? 'nav-link active' : 'nav-link'" id="v-pills-profile-tab" data-bs-toggle="pill" data-bs-target="#v-pills-profile" type="button" role="tab" aria-controls="v-pills-profile">User</button>
+            <button th:if="${isAdmin}" class="nav-link active" id="v-pills-home-tab" data-bs-toggle="pill" data-bs-target="#v-pills-home" type="button" role="tab" aria-controls="v-pills-home" aria-selected="true">Admin</button>
+            <button aria-selected="false" class="nav-link" th:classappend="${!isAdmin} ? 'active' : ''" id="v-pills-profile-tab" data-bs-toggle="pill" data-bs-target="#v-pills-profile" type="button" role="tab" aria-controls="v-pills-profile">User</button>
         </div>
     </body>
 </html>
